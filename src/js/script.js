@@ -1,7 +1,7 @@
 const display = document.querySelector(".calc-container-input");
 const buttons = document.querySelectorAll("button");
-const operators = ["+", "-", "×", "÷", "%"];
-const specialButtons = ["⌫", "AC", "±", ","];
+const operators = ["+", "-", "×", "÷"];
+const specialButtons = ["⌫", "AC", "±", ",", "%"];
 
 buttons.forEach((button) => {
   const value = button.textContent;
@@ -26,6 +26,11 @@ buttons.forEach((button) => {
         } else {
           display.value += ",";
         }
+      } else if (value === "%") {
+        const lastNumber = display.value.split(/[+\-×÷%]/).at(-1);
+        const percent = lastNumber / 100;
+        const beforeLastNumber = display.value.slice(0, -lastNumber.length)
+        display.value = beforeLastNumber + percent
       }
     } else if (operators.includes(value)) {
       // обработка математических операторов
@@ -45,7 +50,9 @@ buttons.forEach((button) => {
       const expression = replaceMathSymbols(display.value);
       const result = calculate(expression);
       if (String(result).includes(".")) {
-        display.value = result.toFixed(2);
+        display.value = result.toFixed(12);
+        for (const fixedValue = 12; display.value.at(-1) === "0"; fixedValue--)
+          display.value = result.toFixed(fixedValue);
       } else {
         display.value = result;
       }

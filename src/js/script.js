@@ -27,10 +27,72 @@ buttons.forEach((button) => {
           display.value += ",";
         }
       } else if (value === "%") {
-        const lastNumber = display.value.split(/[+\-×÷%]/).at(-1);
-        const percent = lastNumber / 100;
-        const beforeLastNumber = display.value.slice(0, -lastNumber.length)
-        display.value = beforeLastNumber + percent
+        if (display.value === "" || operators.includes(display.value.at(-1))) {
+          return;
+        }
+
+        const match = display.value.match(
+          /(\d+[.,]?\d*)([+\-×÷])(\d+[.,]?\d*)$/,
+        );
+
+        let percentValue;
+        let beforeLastNumber;
+
+        if (match) {
+          const firstOperand = parseFloat(match[1].replace(",", "."));
+          const operator = match[2];
+          const lastNumber = parseFloat(match[3].replace(",", "."));
+
+          if (operator === "+" || operator === "-") {
+            percentValue = (firstOperand * lastNumber) / 100;
+          } else {
+            percentValue = lastNumber / 100;
+          }
+          beforeLastNumber = display.value.slice(
+            0,
+            display.value.length - match[3].length,
+          );
+        } else {
+          const lastNumber = display.value.split(/[+\-×÷%]/).at(-1);
+          percentValue = parseFloat(lastNumber.replace(",", ".")) / 100;
+          beforeLastNumber = display.value.slice(
+            0,
+            display.value.length - lastNumber.length,
+          );
+        }
+
+        display.value =
+          beforeLastNumber + String(percentValue).replace(".", ",");
+      } else if (value === "±") {
+        if (display.value === "") {
+          display.value = "-";
+          return;
+        }
+
+        const match = display.value.match(/(-?\d+[.,]?\d*)$/);
+        if (!match) return;
+
+        let lastNumber = match[0];
+        let start = match.index;
+
+        if (lastNumber.startsWith("-")) {
+          const charBeforeMinus = display.value[start - 1];
+          if (
+            charBeforeMinus !== undefined &&
+            !operators.includes(charBeforeMinus)
+          ) {
+            lastNumber = lastNumber.slice(1);
+            start += 1;
+          }
+        }
+
+        const before = display.value.slice(0, start);
+
+        if (lastNumber.startsWith("-")) {
+          display.value = before + lastNumber.slice(1);
+        } else {
+          display.value = before + "-" + lastNumber;
+        }
       }
     } else if (operators.includes(value)) {
       // обработка математических операторов
@@ -50,9 +112,14 @@ buttons.forEach((button) => {
       const expression = replaceMathSymbols(display.value);
       const result = calculate(expression);
       if (String(result).includes(".")) {
-        display.value = result.toFixed(12);
-        for (const fixedValue = 12; display.value.at(-1) === "0"; fixedValue--)
-          display.value = result.toFixed(fixedValue);
+        let fixed = result.toFixed(12);
+        while (fixed.at(-1) === "0") {
+          fixed = fixed.slice(0, -1);
+        }
+        if (fixed.at(-1) === ".") {
+          fixed = fixed.slice(0, -1);
+        }
+        display.value = fixed;
       } else {
         display.value = result;
       }
@@ -64,7 +131,8 @@ buttons.forEach((button) => {
 
 function calculate(expression) {
   try {
-    const result = eval(expression);
+    const normalized = normalizeSigns(expression);
+    const result = eval(normalized);
     if (!Number.isFinite(result)) {
       return "Нельзя делить на ноль";
     } else {
@@ -81,4 +149,18 @@ function replaceMathSymbols(value) {
     .replaceAll("÷", "/")
     .replaceAll(",", ".");
   return replaceSymbols;
+}
+
+function normalizeSigns(expression) {
+  let result = expression;
+  let previous;
+  do {
+    previous = result;
+    result = result
+      .replace(/--/g, "+")
+      .replace(/\+-/g, "-")
+      .replace(/-\+/g, "-")
+      .replace(/\+\+/g, "+");
+  } while (result !== previous);
+  return result;
 }

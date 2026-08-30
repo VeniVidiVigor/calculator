@@ -1,52 +1,69 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Калькулятор</title>
-  <!-- @todo добавить meta -->
-  <link rel="stylesheet" href="src/style.css">
-</head>
-<body>
-  <header>
-    <h1>Калькулятор</h1>
-  </header>
-  <main>
-    <div class="calc-container">
-      <h2 class="calc-container-title">Простой Калькулятор</h2>
-      <input type="text" class="calc-container-input" readonly>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Калькулятор" />
+    <title>Калькулятор</title>
+    <link rel="stylesheet" href="src/fonts/fonts.css" />
+    <link rel="stylesheet" href="src/styles/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Калькулятор</h1>
+    </header>
+    <main>
+      <div class="calc-container">
+        <div class="calc-container-topbar">
+          <span class="calc-led"></span>
+          <span class="calc-model">Veni Vidi Vigor</span>
+        </div>
+        <input
+          type="text"
+          class="calc-container-input"
+          readonly
+          placeholder="0"
+        />
 
-      <div class="calc-container-buttons">
-        <button class="calc-btn">⌫</button>
-        <button class="calc-btn">AC</button>
-        <button class="calc-btn">%</button>
-        <button class="calc-btn">÷</button>
+        <div class="calc-container-buttons">
+          <button class="calc-btn btn-special">⌫</button>
+          <button class="calc-btn btn-special">AC</button>
+          <button class="calc-btn btn-special">%</button>
+          <button class="calc-btn btn-operator">÷</button>
 
-        <button class="calc-btn">7</button>
-        <button class="calc-btn">8</button>
-        <button class="calc-btn">9</button>
-        <button class="calc-btn">×</button>
+          <button class="calc-btn btn-number">7</button>
+          <button class="calc-btn btn-number">8</button>
+          <button class="calc-btn btn-number">9</button>
+          <button class="calc-btn btn-operator">×</button>
 
-        <button class="calc-btn">4</button>
-        <button class="calc-btn">5</button>
-        <button class="calc-btn">6</button>
-        <button class="calc-btn">-</button>
+          <button class="calc-btn btn-number">4</button>
+          <button class="calc-btn btn-number">5</button>
+          <button class="calc-btn btn-number">6</button>
+          <button class="calc-btn btn-operator">-</button>
 
-        <button class="calc-btn">1</button>
-        <button class="calc-btn">2</button>
-        <button class="calc-btn">3</button>
-        <button class="calc-btn">+</button>
+          <button class="calc-btn btn-number">1</button>
+          <button class="calc-btn btn-number">2</button>
+          <button class="calc-btn btn-number">3</button>
+          <button class="calc-btn btn-operator">+</button>
 
-        <button class="calc-btn">±</button>
-        <button class="calc-btn">0</button>
-        <button class="calc-btn">,</button>
-        <button class="calc-btn">=</button>
+          <button class="calc-btn btn-special">±</button>
+          <button class="calc-btn btn-number">0</button>
+          <button class="calc-btn btn-special">,</button>
+          <button class="calc-btn btn-equals">=</button>
+        </div>
       </div>
-    </div>
-  </main>
-  <footer>
-    <h2></h2>
-  </footer>
-  <script src="src/js/script.js"></script>
-</body>
+    </main>
+    <footer>
+      <h2>Calculator by Kirill Vyazikov</h2>
+      <div class="footer-contacts">
+        <a href="mailto:VeniVidiVigorY@yandex.ru">
+          <img src="src/icons/mail-icon.svg" alt="Написать письмо на почту">
+        </a>
+        <a href="https://t.me/venividivigor">
+          <img src="src/icons/telegram-icon.svg" alt="Написать в Telegram\переход в Telegram">
+        </a>
+      </div>
+    </footer>
+    <script src="src/js/script.js"></script>
+  </body>
 </html>
